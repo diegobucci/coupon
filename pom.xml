@@ -14,8 +14,19 @@
 	<name>Coupon API</name>
 	<description>User API assistant to purchase items with coupon</description>
 
+	<repositories>
+		<repository>
+			<id>maven-central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<name>Maven Central</name>
+		</repository>
+	</repositories>
+
 	<properties>
 		<java.version>1.8</java.version>
+		<openapi-generator-maven-plugin.version>3.3.0</openapi-generator-maven-plugin.version>
+		<springfox.swagger.version>2.9.2</springfox.swagger.version>
+		<javax.validation.api.version>2.0.1.Final</javax.validation.api.version>
 	</properties>
 
 	<dependencies>
@@ -40,12 +51,16 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
+			<version>${springfox.swagger.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<version>${springfox.swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -62,6 +77,29 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/swagger/api.yml</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.ml.coupon.web.api</apiPackage>
+							<modelPackage>com.ml.coupon.web.api.model</modelPackage>
+							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+							<validateSpec>true</validateSpec>
+							<configOptions>
+								<delegatePattern>true</delegatePattern>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

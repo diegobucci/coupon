@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  version: '@project.version@'
+  title: '@project.name@'
+  description: '@project.description@'
+
+servers:
+  - url: /api
+
+paths:
+  /coupon:
+    post:
+      summary: "Calculates the list of items that maximizes the amount to spend"
+      description: >-
+        Given a maximum amount, calculate list of items that maximizes the total spent without exceeding it <br>
+        Considerations: <br>
+          - It is only possible to buy one unit per item_id <br>
+          - There is no preference in the total amount of items as long as they spend the maximum possible <br>
+          - The price can contain up to 2 decimal places
+      operationId: calculate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CalculateRequest"
+      responses:
+        '200':
+          description: "OK - Returns the list of calculated items"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateResponse'
+        '404':
+          description: "The item list cannot be calculated"
+
+components:
+  schemas:
+    CalculateRequest:
+      type: object
+      required:
+        - item_ids
+        - amount
+      properties:
+        item_ids:
+          type: array
+          items:
+            type: string
+          example : ["MLA1","MLA2"]
+          description: "Favorite item list"
+        amount:
+          type: number
+          format: float
+          example: 500
+          description: "Maximun amount to spent"
+    CalculateResponse:
+      type: object
+      required:
+        - item_ids
+        - total
+      properties:
+        item_ids:
+          type: array
+          items:
+            type: string
+          description: "Selected item list"
+        total:
+          type: number
+          format: float
+          description: "Maximun calculated amount"
