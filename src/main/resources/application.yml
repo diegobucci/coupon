@@ -2,3 +2,13 @@ project:
   name: '@project.name@'
   version: '@project.version@'
   description: '@project.description@'
+
+ml:
+  apps:
+    item:
+      api: https://api.mercadolibre.com/items/
+
+spring:
+  resttemplate:
+    connecttimeout: 500
+    readtimeout: 500
