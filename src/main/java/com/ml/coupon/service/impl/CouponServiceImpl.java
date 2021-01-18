@@ -1,6 +1,5 @@
 package com.ml.coupon.service.impl;
 
-import com.google.common.collect.Lists;
 import com.ml.coupon.service.CouponService;
 import com.ml.coupon.service.util.CouponUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class CouponServiceImpl implements CouponService {
@@ -46,6 +44,8 @@ public class CouponServiceImpl implements CouponService {
         } else {
             for (String item: items.keySet()) {
                 if (!currentItems.contains(item)) {
+                    // If the maximum amount has been reached, set true to exceedMaxAmount flag
+                    // Otherwise, add item to currentItems
                     if (!exceedsAmount(items,currentItems,amount,item)) {
                         currentItems.add(item);
                         calculate(items,amount,currentItems,bestItems,false);
@@ -56,6 +56,8 @@ public class CouponServiceImpl implements CouponService {
                     }
                 }
             }
+            // All items has been evaluated, set true to exceedMaxAmount flag to finish
+            calculate(items,amount,currentItems,bestItems,true);
         }
     }
 
