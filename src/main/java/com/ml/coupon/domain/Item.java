@@ -12,7 +12,5 @@ import lombok.ToString;
 public class Item {
 
     private String id;
-    private String title;
     private Float price;
-
 }

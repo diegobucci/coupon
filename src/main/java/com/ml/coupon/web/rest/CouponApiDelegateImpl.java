@@ -7,6 +7,7 @@ import com.ml.coupon.web.api.CouponApiDelegate;
 import com.ml.coupon.web.api.model.CalculateRequest;
 import com.ml.coupon.web.api.model.CalculateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class CouponApiDelegateImpl implements CouponApiDelegate {
 
     @Autowired
     private CouponUtil couponUtil;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @Override
     public ResponseEntity<CalculateResponse> calculate(CalculateRequest calculateRequest) {
