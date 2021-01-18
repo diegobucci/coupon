@@ -1,29 +1,16 @@
 package com.ml.coupon.service;
 
-import com.ml.coupon.service.util.ListUtil;
-import com.ml.coupon.web.api.CouponApiDelegate;
-import com.ml.coupon.web.api.model.CalculateRequest;
-import com.ml.coupon.web.api.model.CalculateResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class CouponService implements CouponApiDelegate {
+public interface CouponService {
 
-    @Autowired
-    private ItemService itemService;
-
-    @Autowired
-    private ListUtil<String> listUtil;
-
-    @Override
-    public ResponseEntity<CalculateResponse> calculate(CalculateRequest calculateRequest) {
-        List<String> itemIds = listUtil.distinct(calculateRequest.getItemIds());
-        Map<String,Float> itemsPrice = itemService.getItemPrice(itemIds);
-        return ResponseEntity.ok(new CalculateResponse());
-    }
+    /**
+     * Given a maximum amount and a item list, calculate list of items that maximizes the total spent without exceeding it
+     *
+     * @param items  map with the item's code as the key and the item's price as the value
+     * @param amount maximun amount
+     * @return item list of items that maximize the amount to spend
+     */
+    List<String> calculate(Map<String, Float> items, Float amount);
 }

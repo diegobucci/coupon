@@ -46,7 +46,7 @@ components:
           type: array
           items:
             type: string
-          example : ["MLA1","MLA2"]
+          example: ["MLA1","MLA2"]
           description: "Favorite item list"
         amount:
           type: number

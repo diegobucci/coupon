@@ -26,10 +26,10 @@ public interface ItemService {
      * @return a Map (ItemCode,Price) with the items price
      * @throws InvalidItemCodeException
      */
-    default Map<String,Float> getItemPrice(List<String> itemCodes) throws InvalidItemCodeException {
+    default Map<String, Float> getItemPrice(List<String> itemCodes) throws InvalidItemCodeException {
         return itemCodes
                 .stream()
                 .parallel()
-                .collect(Collectors.toMap(Function.identity(), itemCode->this.getItemPrice(itemCode)));
+                .collect(Collectors.toMap(Function.identity(), itemCode -> this.getItemPrice(itemCode)));
     }
 }
