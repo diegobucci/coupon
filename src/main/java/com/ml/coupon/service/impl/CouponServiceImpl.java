@@ -1,7 +1,9 @@
 package com.ml.coupon.service.impl;
 
+import com.ml.coupon.domain.Coupon;
 import com.ml.coupon.service.CouponService;
-import com.ml.coupon.service.util.CouponUtil;
+import com.ml.coupon.service.ItemService;
+import com.ml.coupon.service.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,19 @@ import java.util.Map;
 public class CouponServiceImpl implements CouponService {
 
     @Autowired
-    private CouponUtil couponUtil;
+    private ListUtil listUtil;
+
+    @Autowired
+    private ItemService itemService;
 
     @Override
-    public List<String> calculate(Map<String, Float> items, Float amount) {
+    public Coupon calculateCoupon(List<String> items, Float amount) {
+        Map<String, Float> itemPrices = itemService.getItemPrice(listUtil.distinct(items));
+        List<String> calculatedItems = this.calculate(itemPrices, amount);
+        return Coupon.builder().itemsIds(calculatedItems).total(calculateItemsPrice(itemPrices,calculatedItems)).build();
+    }
+
+    private List<String> calculate(Map<String, Float> items, Float amount) {
         List<String> bestItem = new ArrayList<>();
         calculate(items,amount, new ArrayList(),bestItem, false);
         return bestItem;
@@ -37,7 +48,7 @@ public class CouponServiceImpl implements CouponService {
         // The maximum amount to spend has been reached
         if (exceedMaxAmount) {
             // If the current items price is greater than the best items price, the current items is the best option
-            if (couponUtil.calculateItemsPrice(items, currentItems)>couponUtil.calculateItemsPrice(items,bestItems)) {
+            if (calculateItemsPrice(items, currentItems)>calculateItemsPrice(items,bestItems)) {
                 bestItems.clear();
                 bestItems.addAll(currentItems);
             }
@@ -71,6 +82,20 @@ public class CouponServiceImpl implements CouponService {
      * @return True if the selected item price exceeds the maximum amount to spend
      */
     private boolean exceedsAmount(Map<String,Float> itemsPrice, List<String> items, Float amount, String itemId) {
-        return couponUtil.calculateItemsPrice(itemsPrice,items)+itemsPrice.get(itemId)>amount;
+        return calculateItemsPrice(itemsPrice,items)+itemsPrice.get(itemId)>amount;
+    }
+
+    /**
+     * Given the price list and a list of selected items, calculate the total price of the selected items
+     *
+     * @param itemPrices Item prices
+     * @param selectedItems Selected items to calculate the total price
+     * @return Total price of selected items
+     */
+    private Float calculateItemsPrice(Map<String,Float> itemPrices, List<String> selectedItems) {
+        Double total = selectedItems.stream()
+                .mapToDouble(item->itemPrices.get(item))
+                .sum();
+        return total.floatValue();
     }
 }
