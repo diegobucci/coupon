@@ -29,10 +29,9 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
-                .groupName("coupon-api")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ml.coupon"))
+                .apis(RequestHandlerSelectors.basePackage("com.ml.coupon.web.rest"))
                 .paths(PathSelectors.any())
                 .build();
     }
