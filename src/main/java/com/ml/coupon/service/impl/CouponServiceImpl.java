@@ -1,6 +1,7 @@
 package com.ml.coupon.service.impl;
 
 import com.ml.coupon.domain.Coupon;
+import com.ml.coupon.exception.CouponNotFoundException;
 import com.ml.coupon.service.CouponService;
 import com.ml.coupon.service.ItemService;
 import com.ml.coupon.service.util.ListUtil;
@@ -24,6 +25,9 @@ public class CouponServiceImpl implements CouponService {
     public Coupon calculateCoupon(List<String> items, Float amount) {
         Map<String, Float> itemPrices = itemService.getItemPrice(listUtil.distinct(items));
         List<String> calculatedItems = this.calculate(itemPrices, amount);
+        if (calculatedItems.isEmpty()) {
+            throw new CouponNotFoundException();
+        }
         return Coupon.builder().itemsIds(calculatedItems).total(calculateItemsPrice(itemPrices,calculatedItems)).build();
     }
 

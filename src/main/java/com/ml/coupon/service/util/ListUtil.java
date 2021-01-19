@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 public class ListUtil<T> {
 
     public List<T> distinct(List<T> list) {
-        return list.stream().collect(Collectors.toList());
+        if (list==null) {
+            return null;
+        }
+        return list.stream().distinct().collect(Collectors.toList());
     }
 }

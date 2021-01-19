@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 @Getter
-@Setter
 @ToString
 @Accessors(chain = true, fluent = true)
 @Builder

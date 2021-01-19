@@ -12,6 +12,5 @@ public class SimpleCacheCustomizer implements CacheManagerCustomizer<ConcurrentM
     @Override
     public void customize(ConcurrentMapCacheManager cacheManager) {
         cacheManager.setCacheNames(Arrays.asList("itemCache"));
-        cacheManager.setAllowNullValues(false);
     }
 }
